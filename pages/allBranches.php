@@ -1,27 +1,76 @@
 <h3>All Branches</h3>
 <div class="resp-table">
-<table>
+<!-- <table>
 	<tr>
 		<?php
-			$brcols = mysqli_query($con, "SHOW COLUMNS FROM branchmaster");
-			$i = mysqli_num_rows($brcols);
-			while ($cols=mysqli_fetch_assoc($brcols)) {
-				echo "<th>".$cols['Field']."</th>";
-			}
+			// $brcols = mysqli_query($con, "SHOW COLUMNS FROM branchmaster");
+			// $i = mysqli_num_rows($brcols);
+			// while ($cols=mysqli_fetch_assoc($brcols)) {
+			// 	echo "<th>".$cols['Field']."</th>";
+			// }
 		?>
+        <th>StateName</th>
+		<th>Modify</th>
+	</tr>
+ <?php 
+// $brsql = mysqli_query($con, "SELECT * FROM branchmaster");
+// while ($row=mysqli_fetch_array($brsql)) {
+//     $stateid = $row['BranchState'];
+//     $statesql=mysqli_query($con, "SELECT StateName FROM indiastatesmaster where StateId=$stateid");
+//     $statearr = mysqli_fetch_array($statesql);
+//     $statename = $statearr['StateName'];
+// 	echo "<tr>";
+// 	for ($j=0; $j < $i ; $j++) { 
+// 		echo "<td>".$row[$j]."</td>";
+// 	}
+// 	echo "<td>$statename</td> <td> <a href=''>Edit</a> / <a href=''>Delete</a> </td> </tr>";
+// }
+  ?>
+</table> -->
+
+<table>
+	<tr>
+		<th>Branch Name</th>
+        <th>Branch Status</th>
+        <th>State</th>
+        <th>Branch Inchrage</th>
+        <th>Branch Address</th>
 		<th>Modify</th>
 	</tr>
 <?php
 $brsql = mysqli_query($con, "SELECT * FROM branchmaster");
 while ($row=mysqli_fetch_array($brsql)) {
-	echo "<tr>";
-	for ($j=0; $j < $i ; $j++) { 
-		echo "<td>".$row[$j]."</td>";
-	}
-	echo "<td> <a href=''>Edit</a> / <a href=''>Delete</a> </td> </tr>";
+    $stateid = $row['BranchState'];
+    $branchname = $row['BranchName'];
+    $inchargeid = $row['BranchIncharge'];
+    $branchaddress = $row['BranchFullAddress'];
+    $branchstatus = $row['isActive'];
+    
+    if($branchstatus == 1){
+        $brstatus = "Active";
+    }
+    else{
+        $brstatus = "In-Active";
+    }
+
+    $statesql=mysqli_query($con, "SELECT StateName FROM indiastatesmaster where StateId=$stateid");
+    $statearr = mysqli_fetch_array($statesql);
+    $statename = $statearr['StateName'];
+	
+    echo "<tr>
+        <td>$branchname</td>
+        <td>$brstatus</td>
+        <td>$statename</td> 
+        <td>$inchargeid</td>
+        <td>$branchaddress</td>
+            
+        <td> <a href='#'>Edit</a> / <a href='#'>Delete</a> </td> 
+    </tr>";
 }
 ?>
 </table>
+
+
 </div>
 
 <div class="container">
@@ -41,10 +90,19 @@ while ($row=mysqli_fetch_array($brsql)) {
                 <input type="text" name="branchlocation" class="input_field" required />
                 <label class="input_label">Branch Location</label>
             </div>
-			<div class="input">
-                <input type="text" name="branchstate" class="input_field" required />
-                <label class="input_label">Branch State</label>
+            <div class="select">
+                <select name="branchstate" class="select_option">
+                <option>Select branch State</option>
+            <?php
+                $statesql=mysqli_query($con, "SELECT StateId,StateName FROM indiastatesmaster");
+                while($statearr = mysqli_fetch_array($statesql)){
+                    echo "<option value=".$statearr['StateId'].">".$statearr['StateName']."</option>";
+                }
+                $statename = $statearr['StateName'];
+            ?>
+                </select>
             </div>
+
 			<div class="input">
                 <input type="text" name="branchincharge" class="input_field" required />
                 <label class="input_label">Branch Inchrage</label>

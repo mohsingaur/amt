@@ -27,7 +27,10 @@ include 'bin/config.php';
 	<div class="side-bar">
 			<ul>
 				<li>
-				<i class="fa fa-home"></i> <a href="?generateQuote">Genrate New Quote</a> 
+				<i class="fa fa-home"></i> <a href="?generateQuote">Generate New Quote</a> 
+				</li>
+				<li>
+				<i class="fa fa-home"></i> <a href="?purchaseAsset">Purchase New Asset (PO)</a> 
 				</li>
 				<li>
 				<i class="fa fa-user"></i> <a href="?addAsset">Add Assets</a> 
@@ -48,6 +51,9 @@ include 'bin/config.php';
 			<?php
 			if (isset($_GET['generateQuote'])) {
 				include 'pages/genrateQuote.php';
+			}
+			elseif (isset($_GET['purchaseAsset'])) {
+				include 'pages/assetPurchase.php';
 			}
 			elseif (isset($_GET['addAsset'])) {
 				include 'pages/addAsset.php';

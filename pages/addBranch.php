@@ -15,10 +15,19 @@
                 <input type="text" name="branchlocation" class="input_field" required />
                 <label class="input_label">Branch Location</label>
             </div>
-			<div class="input">
-                <input type="text" name="branchstate" class="input_field" required />
-                <label class="input_label">Branch State</label>
+            <div class="select">
+                <select name="branchstate" class="select_option">
+                <option>Select branch State</option>
+            <?php
+                $statesql=mysqli_query($con, "SELECT StateId,StateName FROM indiastatesmaster");
+                while($statearr = mysqli_fetch_array($statesql)){
+                    echo "<option value=".$statearr['StateId'].">".$statearr['StateName']."</option>";
+                }
+                $statename = $statearr['StateName'];
+            ?>
+                </select>
             </div>
+
 			<div class="input">
                 <input type="text" name="branchincharge" class="input_field" required />
                 <label class="input_label">Branch Inchrage</label>
