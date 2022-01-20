@@ -17,19 +17,21 @@
         <form class="card_form" method="post">
 		<div class="select">
 				<select name="pid" class="select_option" onChange='GetAssetDetails(this.value)'>
-					<option>Select Quotation Number/Purchase Id</option>
+					<option>Select Purchase Id/Quotation Number</option>
 					<?php
-						$psql = mysqli_query($con, "SELECT QuotationId,QuotationNumber FROM quotationmaster");
+						$psql = mysqli_query($con, "SELECT * FROM assetpurchasemaster");
 						while($row=mysqli_fetch_array($psql)){
-							echo "<option value=".$row[0].">".$row[1]."</option>";
+							echo "<option value=".$row['PurchaseId'].">".$row['PurchaseId']."/".$row['QuotationId']."</option>";
 						}
 					?>
 				</select>
 			</div>
-			<div class="card_info">
+			
+			<!-- <div class="card_info">
 				<p id="getastdetails">
 				</p>
-			</div>
+			</div> -->
+
             <div class="input">
                 <input type="text" name="sn" class="input_field" required />
                 <label class="input_label">Asset Serial Number</label>

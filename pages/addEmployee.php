@@ -1,140 +1,183 @@
-<?php
-	include 'bin/config.php';
-	include 'templates/header.php';
-?>
-
-<h3>Employee List</h3>
-
-<div class="resp-table">
+<h3>All DMI Employee</h3>
+<div class="resp-table"> 
 <table>
 	<tr>
 		<?php
-			$colsqr = mysqli_query($con, "SHOW COLUMNS FROM dmiemployees");
-			$i = mysqli_num_rows($colsqr);
-			while ($cols=mysqli_fetch_assoc($colsqr)) {
+			$mdcols = mysqli_query($con, "SHOW COLUMNS FROM dmiemployeemaster");
+			$i = mysqli_num_rows($mdcols);
+			while ($cols=mysqli_fetch_assoc($mdcols)) {
 				echo "<th>".$cols['Field']."</th>";
 			}
 		?>
 		<th>Modify</th>
 	</tr>
-	<?php
-		$dataqr = mysqli_query($con, "SELECT * FROM dmiemployees");
-		while($row=mysqli_fetch_array($dataqr)){
-			if ($row['Deleted_Employee']==0) {
-				echo " ";
-			}
-			else{
-				if ($row['10']==1) {
-					$row['10']="Active";
-				}
-				else{
-					$row['10']="Resign";
-				}
-			echo "<tr>";
-				for ($j=0; $j < $i; $j++) { 
-					echo "<td>".$row[$j]."</td>";
-				}
-			echo "<td> <a href=''>Edit</a>/<a href='?delid=$row[0]'>Delete</a> </td>
-					</tr>";
-				}
-		}
-	?>
+<?php
 
-<tr>
-<form method="post" action="" enctype="multipart/form-data">
-			
-					<td>Employee Code <input type="number" name="Emp_Code"></td>
-				
-					<td>Employee Name <input type="text" name="Employe_name"></td>
-				
-					<td>Joinig Date <input type="date" name="Joining_Date"></td>
-			
-					<td>Supervisor Name <input type="text" name="Supervisor"></td>
-			
-					<td>Mobile No <input type="text" name="Contact_Number"></td>
-			
-					<td>Designation <input type="text" name="Designation"></td>
-				
-					<td>Personal Email Id <input type="text" name="Personal_Mail"></td>
-				
-					<td>Official Email Id <input type="text" name="Official_Mail"></td>
-				
-					<td>Entity Name <select name="Emp_Entity">
-						<option> <--Select Entity--></option>
-					<?php
-						$ensql = mysqli_query($con, "SELECT * FROM dmi_entity");
-						while ($row=mysqli_fetch_array($ensql)) {
-						echo "<option value=".$row['2'].">$row[1]</option>";
-						}
-					?>
-					</select> 
-					</td>
-					<td>Branch <select name="Emp_Branch_ID">
-						<option> <--Select Branch--></option>
-					<?php
-						$brsql = mysqli_query($con, "SELECT * FROM dmi_branches");
-						while ($row1=mysqli_fetch_array($brsql)) {
-						echo "<option value=".$row1['2'].">".$row1['1']."</option>";
-						}
-					?>
-					</select>
-					</td>				
-					<td>Status <input type="checkbox" name="Emp_Status" value="1" checked> Active</td>
-					<td> <input type="submit" name="save" value="save"> </td>
-		</form>
-	</tr>
+$mdsql = mysqli_query($con, "SELECT * FROM dmiemployeemaster");
+while ($row=mysqli_fetch_array($mdsql)) {
+	echo "<tr>";
+	for ($j=0; $j < $i ; $j++) { 
+		echo "<td>".$row[$j]."</td>";
+	}
+	echo "<td> <a href=''>Edit</a> / <a href=''>Delete</a> </td> </tr>";
+}
+?>
 </table>
 </div>
-<?php
-if (isset($_POST['save'])) {
-	$Emp_Code = $_POST['Emp_Code'];
-	$Employe_name = $_POST['Employe_name'];
-	$Contact_Number = $_POST['Contact_Number'];
-	$Designation = $_POST['Designation'];
-	$Supervisor = $_POST['Supervisor'];
-	$Personal_Mail = $_POST['Personal_Mail'];
-	$Official_Mail = $_POST['Official_Mail'];
-	$Emp_Entity = $_POST['Emp_Entity'];
-	$Emp_Branch_ID = $_POST['Emp_Branch_ID'];
-	$Joining_Date = $_POST['Joining_Date'];
-	$Emp_Status = $_POST['Emp_Status'];
-	$Delete_Employee = 1;
-
-// $sql = sprintf(
-// 		"INSERT INTO %s (%s) values (%s)",
-// 		"dmi_employee_details",
-// 		implode(",", array_keys($new_emp)),
-// 		"'$".implode("','$",array_keys($new_emp))
-// );
-
-//var_dump($sql);
-
-$sql = mysqli_query($con,"INSERT INTO dmiemployees VALUES ('','$Emp_Code','$Employe_name','$Contact_Number','$Designation','$Supervisor','$Personal_Mail','$Official_Mail','$Joining_Date','','$Emp_Status','$Emp_Entity','','$Emp_Branch_ID','$Delete_Employee')");
-
-if ($sql) {
-	echo "Save";
-}
-else{
-	echo "Sorry!";
-}
-}
-?>
 
 
-<?php
-if (isset($_GET['delid'])) {
-	$delete = $_GET['delid'];
-	$del = mysqli_query($con,"UPDATE dmiemployees SET Deleted_Employee=0 WHERE Emp_ID=$delete");
-	if ($del) {
-		echo "<script> alert('Data has been deleted.') </script>";
-	}
-	else{
-		echo "<script> alert('Something Goes wrong!') </script> ";
-	}
-}
-?>
-	
+<div class="container">
+    <div class="card">
+        <h1 class="card_title">Add Employee Details</h1>
+        <form class="card_form" method="post">
+			<div class="input">
+                <input type="text" name="empname" class="input_field" required />
+                <label class="input_label">Employee Name</label>
+            </div>
 
-<?php
- include 'templates/footer.php';
-?>
+			<div class="input">
+                <input type="email" name="officialmail" class="input_field" required />
+                <label class="input_label">Employee Official Mail</label>
+            </div>
+
+			<div class="input">
+                <input type="email" name="personalmail" class="input_field" required />
+                <label class="input_label">Employee Personal Mail</label>
+            </div>
+
+			<div class="input">
+                <input type="text" name="mobile" class="input_field" required />
+                <label class="input_label">Employee Mobile Number</label>
+            </div>
+
+			<div class="input">
+                <input type="date" name="emodoj" class="input_field" required />
+                <label class="input_label">Employee Date of Joining</label>
+            </div>
+
+			<div class="select">
+				<select name="entity" class="select_option">
+					<option>Select Employee Supervisor</option>
+				<?php
+				$entityqry = mysqli_query($con, "SELECT * FROM dmiemployeemaster");
+				while($entarr=mysqli_fetch_array($entityqry)){
+					echo "<option value='".$entarr['EmpId']."'>".$entarr['EmpName']." [".$entarr['EmpOfficialMail']."]</option>";
+				}
+				?>
+				</select>
+			</div>
+
+            <div class="select">
+				<select name="entity" class="select_option">
+					<option>Select Entity Name</option>
+				<?php
+				$entityqry = mysqli_query($con, "SELECT * FROM entitymaster");
+				while($entarr=mysqli_fetch_array($entityqry)){
+					echo "<option value='".$entarr['DmiEntityId']."'>".$entarr['DmiEntityName']."</option>";
+				}
+				?>
+				</select>
+			</div>
+			
+            <div class="select">
+                <select name="joininglocation" class="select_option">
+                <option>Select Joining Location</option>
+            <?php
+                $statesql=mysqli_query($con, "SELECT * FROM branchmaster");
+                while($statearr = mysqli_fetch_array($statesql)){
+                    echo "<option value=".$statearr['BranchId'].">".$statearr['BranchName']."</option>";
+                }
+            ?>
+                </select>
+            </div>
+
+			<div class="select">
+                <select name="branchlocation" class="select_option">
+                <option>Select Branch Name</option>
+            <?php
+                $statesql=mysqli_query($con, "SELECT * FROM branchmaster");
+                while($statearr = mysqli_fetch_array($statesql)){
+                    echo "<option value=".$statearr['BranchId'].">".$statearr['BranchName']."</option>";
+                }
+            ?>
+                </select>
+            </div>
+
+			<div class="select">
+                <select name="designation" class="select_option">
+                <option>Select Designation</option>
+            <?php
+                $vendorsql=mysqli_query($con, "SELECT * FROM dmiemployeedesignationmaster");
+                while($vendorarr = mysqli_fetch_array($vendorsql)){
+                    echo "<option value=".$vendorarr['DesignationId'].">".$vendorarr['DesignationName']."</option>";
+                }
+            ?>
+                </select>
+            </div>
+
+			<div class="select">
+                <select name="department" class="select_option">
+                <option>Select Department</option>
+            <?php
+                $assettypesql=mysqli_query($con, "SELECT * FROM dmidepartmentmaster");
+                while($assettypearr = mysqli_fetch_array($assettypesql)){
+                    echo "<option value=".$assettypearr['DepartmentId'].">".$assettypearr['DepartmentName']."</option>";
+                }
+            ?>
+                </select>
+            </div>
+
+			<div class="select">
+                <select name="empstatus" class="select_option">
+                <option>Select Employee Status</option>
+            <?php
+                $quotesql=mysqli_query($con, "SELECT * FROM employeestatusmaster");
+                while($quotearr = mysqli_fetch_array($quotesql)){
+                    echo "<option value=".$quotearr['EmployeeStatusId'].">".$quotearr['EmployeeStatusName']."</option>";
+                }
+            ?>
+                </select>
+            </div>
+
+			<div class="radio">    
+                <input type="radio" name="isrequired" value="0"> Yes
+                <input type="radio" name="isrequired" value="1" checked> No
+				<label>Asset Required</label>
+            </div> 
+
+			<div class="select">
+                <select name="assetid" class="select_option">
+                <option>Select Asset</option>
+            <?php
+                $brandsql=mysqli_query($con, "SELECT * FROM dmiassetmaster");
+                while($brandarr = mysqli_fetch_array($brandsql)){
+                    echo "<option value=".$brandarr['AssetId'].">".$brandarr['AssetSerialNumber']."-[".$brandarr['AssetHostname']."]</option>";
+                }
+            ?>
+                </select>
+            </div>
+
+			<div class="radio">                
+                <input type="radio" name="isactive" value="0"> In-Active
+                <input type="radio" name="isactive" value="1" checked> Active
+            </div>            
+            <input type="submit" class="card_button" name="save" value="Save">
+        </form>
+        <div class="card_info">
+            <p>
+            <?php
+                if (isset($_POST['save'])) {
+                    extract($_POST);
+                    $sql = mysqli_query($con,"INSERT INTO assetpurchasemaster (EntityId,AssetPurchaseLocation,VendorId,QuotationId,BrandId,ModelId,AssetType,ProcessorType,StorageType,RAMType,RAMSize,SecondaryStorageSize,DisplaySize,DefaultOS,AssetQuantity,TotalAmount,PODate,InvoiceDate,InvoiceNumber,AssetDelieveyDate,IsRAMUpgrade,UpgradedRAMType,UpgradedRAMSize,PeripheralsList,IsActive) VALUES ('$entity','$purchaselocation','$vendorname','$quote','$brand','$model','$assettype','$processor','$storage','$ram','$ramsize','$storagesize','$display','$defaultos','$quantity','$amount','$podate','$invoicedate','$invoicenumber','$delieveydate','$isramupgrade','$upgradedramtype','$upgradedramsize','$peripherals','$isactive')");
+                    if ($sql) {
+                        echo "Saved Successfully...";
+                    }
+                    else{
+                        echo "Sorry!";
+                    }
+                }
+            ?>
+            </p>
+        </div>
+    </div> 
+</div>

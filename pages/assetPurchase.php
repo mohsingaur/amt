@@ -1,3 +1,31 @@
+<h3>All PO</h3>
+<div class="resp-table"> 
+<table>
+	<tr>
+		<?php
+			$mdcols = mysqli_query($con, "SHOW COLUMNS FROM assetpurchasemaster");
+			$i = mysqli_num_rows($mdcols);
+			while ($cols=mysqli_fetch_assoc($mdcols)) {
+				echo "<th>".$cols['Field']."</th>";
+			}
+		?>
+		<th>Modify</th>
+	</tr>
+<?php
+
+$mdsql = mysqli_query($con, "SELECT * FROM assetpurchasemaster");
+while ($row=mysqli_fetch_array($mdsql)) {
+	echo "<tr>";
+	for ($j=0; $j < $i ; $j++) { 
+		echo "<td>".$row[$j]."</td>";
+	}
+	echo "<td> <a href=''>Edit</a> / <a href=''>Delete</a> </td> </tr>";
+}
+?>
+</table>
+</div>
+
+
 <div class="container">
     <div class="card">
         <h1 class="card_title">New Asset Purchase</h1>
@@ -139,7 +167,7 @@
 
 			<div class="select">
                 <select name="ramsize" class="select_option">
-                <option>Select RAM Size</option>
+                <option></option>
             <?php
                 $storagesql=mysqli_query($con, "SELECT * FROM assetstoragesizemaster");
                 while($storagearr = mysqli_fetch_array($storagesql)){
@@ -147,6 +175,7 @@
                 }
             ?>
                 </select>
+				<label class="input_label">Select Ram size</Select></label>
             </div>
 
 			<div class="input">
